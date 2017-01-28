@@ -1,0 +1,34 @@
+---
+driver:
+  name: ec2
+  aws_ssh_key_id: barclays-windows
+  region: eu-west-2
+  availability_zone: a
+  image_id: ami-738a8017
+  subnet_id: subnet-b2d331c9
+  instance_type: t2.medium
+  security_group_ids: sg-bc569bd5
+  retryable_tries: 120
+  associate_public_ip: true
+
+provisioner:
+  name: chef_zero
+
+transport:
+  name: winrm
+  elevated: true
+  ssh_key: /Users/warren/.ssh/barclays-windows.pem
+
+platforms:
+  - name: windows-2012r2
+    transport:
+      username: Administrator
+
+suites:
+  - name: default
+    run_list:
+      - recipe[awesome_customers_windows::default]
+    attributes:
+      sql_server:
+        sysadmins: ['Administrator']
+        server_sa_password: 'xyX_sa_zk$$w0v9'
